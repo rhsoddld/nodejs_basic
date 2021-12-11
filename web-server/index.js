@@ -1,14 +1,37 @@
 const express = require('express');
 const app = express()
 
-app.get('/', function(req, res) {
-    console.log(req);
-    res.send('<h1>Top Page</h1>')
-})
+//console.log(__dirname);
+//C:\Users\rhsod\Documents\GitHub\nodejs_basic\web-server
+const path = require('path');   
+//console.log(path);
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/about', function(req, res) {
-    res.send('About Page')
-})
+
+app.use(express.urlencoded({extended: false})); // for getting post method request 
+
+// app.get('/', function(req, res) {
+//     console.log(req);
+//     res.send('<h1>Top Page</h1>')
+// })
+
+// app.get('/about', function(req, res) {
+//     res.send('About Page')
+// })
+
+app.post('/api/v1/quiz', function(req, res) {
+    const answer = req.body.answer;
+//    res.send(answer);
+
+    if(answer === "2"){
+        res.redirect("/correct.html")
+//        res.send("<h1>right answer</h1>");
+    }else {
+        res.redirect("/wrong.html")
+//        res.send("wrong answer");
+    }
+});
+
 
 app.get('/api/v1/users', function(req, res) {
     res.send({
@@ -16,6 +39,7 @@ app.get('/api/v1/users', function(req, res) {
         age: 30 
     });
 });
+
 
 app.listen(3000, function() {
     console.log('Running')
